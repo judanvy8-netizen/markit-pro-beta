@@ -1,0 +1,8 @@
+{
+  "name": "markit-pro-beta",
+  "private": true,
+  "scripts": {
+    "test": "node tests/calculation-regression.mjs",
+    "build:css": "npm exec --yes --package tailwindcss@3.4.17 -- tailwindcss -i ./styles.css -o ./vendor/tailwind-3.4.17.css --content ./index.html --minify"
+  }
+}

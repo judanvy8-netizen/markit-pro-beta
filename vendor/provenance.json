@@ -1,0 +1,21 @@
+{
+  "downloaded": "2026-10-28",
+  "files": [
+    {
+      "file": "chart-4.5.1.umd.min.js",
+      "source": "https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js",
+      "sha256": "48444a82d4edcb5bec0f1965faacdde18d9c17db3063d042abada2f705c9f54a"
+    },
+    {
+      "file": "xlsx-0.20.3.full.min.js",
+      "source": "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js",
+      "sha256": "cc015130aa8521e7f088f88898eba949ccdcbfb38df0bd129b44b7273c3a6f41"
+    },
+    {
+      "file": "tailwind-3.4.17.css",
+      "source": "Generated from index.html and styles.css using tailwindcss@3.4.17",
+      "rebuild": "npm run build:css",
+      "sha256": "518e702765203cf835f03b47de849ddb6a6dc2a634ae322d3b4c91e43524a46f"
+    }
+  ]
+}

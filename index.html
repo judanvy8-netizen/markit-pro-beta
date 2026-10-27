@@ -2,16 +2,18 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마진키트 엔터프라이즈 (MarginKit Enterprise)</title>
     <meta name="description" content="셀러용 세무·재고·다채널 통합 마진 시뮬레이션. 플랫폼 수수료, 광고비, 세금 충당금을 반영해 순마진과 목표가를 계산합니다.">
     <meta name="theme-color" content="#0f172a">
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./vendor/tailwind-3.4.17.css">
     <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./vendor/chart-4.5.1.umd.min.js"></script>
     <!-- SheetJS (XLSX 내보내기용) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="./vendor/xlsx-0.20.3.full.min.js"></script>
 <style>
 .ov-bar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(5,8,16,.94);border-bottom:1px solid rgba(148,163,184,.22);backdrop-filter:blur(10px);color:#e8eef7;font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",sans-serif;font-size:13px}
 .ov-bar a{color:#7dd3fc;text-decoration:none;font-weight:700}
@@ -45,10 +47,10 @@
 <body class="bg-gray-900 text-gray-100 font-sans antialiased min-h-screen py-8 px-4">
 
 <div class="ov-bar">
-  <div><a class="ov-co" href="http://orvantro.com/">ORVANTRO</a> · <span>오르반트로</span></div>
+  <div><a class="ov-co" href="https://orvantro.com/">ORVANTRO</a> · <span>오르반트로</span></div>
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <span class="ov-beta">BETA · 결제/거래 불가</span>
-    <a href="http://orvantro.com/">공식 홈페이지</a>
+    <a href="https://orvantro.com/">공식 홈페이지</a>
   </div>
 </div>
 
@@ -59,7 +61,7 @@
             <div>
                 <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 tracking-tight">MARGINKIT <span class="text-xs bg-indigo-600 text-white px-2 py-0.5 rounded-full font-semibold">ENTERPRISE</span></h1>
                 <p class="text-gray-400 text-sm mt-1">프로 셀러를 위한 세무·재고·다채널 통합 마진 시뮬레이션 솔루션</p>
-                <p class="text-sky-300 text-xs mt-2 font-semibold">Made by ORVANTRO (오르반트로) · <a class="underline" href="http://orvantro.com/">공식 홈페이지</a> · BETA</p>
+                <p class="text-sky-300 text-xs mt-2 font-semibold">Made by ORVANTRO (오르반트로) · <a class="underline" href="https://orvantro.com/">공식 홈페이지</a> · BETA</p>
             </div>
             <div class="mt-4 sm:mt-0 flex space-x-3">
                 <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center shadow-lg shadow-emerald-900/30">
@@ -80,12 +82,12 @@
                     <h2 class="text-base font-bold text-gray-200 flex items-center"><span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span> 1. 상품 및 매입 정보</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">매입원가 (공급가, 부가세 별도)</label>
-                            <input type="number" id="costPrice" value="12000" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="costPrice">매입원가 (공급가, 부가세 별도)</label>
+                            <input type="number" min="0" max="1000000000000" id="costPrice" value="12000" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">판매가격 (소비자가, VAT 포함)</label>
-                            <input type="number" id="sellPrice" value="29900" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="sellPrice">판매가격 (소비자가, VAT 포함)</label>
+                            <input type="number" min="0" max="1000000000000" id="sellPrice" value="29900" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
                         </div>
                     </div>
                 </div>
@@ -95,7 +97,7 @@
                     <h2 class="text-base font-bold text-gray-200 flex items-center"><span class="w-2 h-2 bg-indigo-500 rounded-full mr-2"></span> 2. 플랫폼 수수료 및 부대비용</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">판매 플랫폼 선택</label>
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="platform">판매 플랫폼 선택</label>
                             <select id="platform" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" onchange="updatePlatformFee()">
                                 <option value="0.033">네이버 스마트스토어 (3.3%)</option>
                                 <option value="0.058">쿠팡 로켓그로스/마켓 (5.8%)</option>
@@ -105,22 +107,22 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">수수료율 (%)</label>
-                            <input type="number" step="0.1" id="customFee" value="3.3" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="customFee">수수료율 (%)</label>
+                            <input type="number" step="0.1" id="customFee" min="0" max="100" value="3.3" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="document.getElementById('platform').value = 'custom'; calculate()">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">건당 택배비 및 부자재</label>
-                            <input type="number" id="shippingFee" value="3000" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="shippingFee">건당 택배비 및 부자재</label>
+                            <input type="number" min="0" max="1000000000000" id="shippingFee" value="3000" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">건당 퍼포먼스 광고비 (키워드/배너)</label>
-                            <input type="number" id="adFee" value="2500" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="adFee">건당 퍼포먼스 광고비 (키워드/배너)</label>
+                            <input type="number" min="0" max="1000000000000" id="adFee" value="2500" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">월 고정 간접비 배분액 (사무실/인건비 등 n분의 1)</label>
-                            <input type="number" id="fixedCostPerUnit" value="500" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="fixedCostPerUnit">월 고정 간접비 배분액 (사무실/인건비 등 n분의 1)</label>
+                            <input type="number" min="0" max="1000000000000" id="fixedCostPerUnit" value="500" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
                         </div>
                     </div>
                 </div>
@@ -128,21 +130,21 @@
                 <!-- 3. [프리미엄] 세무 및 법인/개인사업자 세액 추정 -->
                 <div class="bg-gray-800 rounded-2xl border border-gray-700/60 p-6 space-y-4">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-base font-bold text-gray-200 flex items-center"><span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span> 3. 세무 리스크 시뮬레이터 (부가세 및 소득세)</h2>
+                        <h2 class="text-base font-bold text-gray-200 flex items-center"><span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span> 3. 세금 충당금 시나리오 (간이 추정)</h2>
                         <span class="text-xs bg-purple-900/60 text-purple-300 px-2.5 py-1 rounded-md border border-purple-700/50">Enterprise Only</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">사업자 유형</label>
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="taxType">충당금 계산 가정</label>
                             <select id="taxType" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" onchange="calculate()">
-                                <option value="general">일반과세자 (부가세 10% 구조 반영)</option>
-                                <option value="simple_retail">간이과세자 (소매업 1.5% 추정)</option>
-                                <option value="corporate">법인사업자 (법인세율 구간 반영)</option>
+                                <option value="general">일반 시나리오 (VAT 차액 × 80%)</option>
+                                <option value="simple_retail">매출 비례 시나리오 (1.5%)</option>
+                                <option value="corporate">보수적 시나리오 (VAT 차액 × 110%)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1">예상 월 판매 수량 (손익분기·총매출용)</label>
-                            <input type="number" id="monthlyVolume" value="500" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+                            <label class="block text-xs font-medium text-gray-400 mb-1" for="monthlyVolume">예상 월 판매 수량 (손익분기·총매출용)</label>
+                            <input type="number" min="0" max="1000000000" step="1" id="monthlyVolume" value="500" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
                         </div>
                     </div>
                 </div>
@@ -162,7 +164,7 @@
             <!-- 우측: 결과 분석 및 시각화 대시보드 (1칸) -->
             <div class="bg-gray-800 rounded-2xl border border-gray-700/60 p-6 flex flex-col justify-between space-y-6">
                 <div>
-                    <h2 class="text-lg font-bold text-gray-100 border-b border-gray-700 pb-3 mb-4">📈 실시간 핵심 마진 리포트</h2>
+                    <h2 class="text-lg font-bold text-gray-100 border-b border-gray-700 pb-3 mb-4">📈 실시간 핵심 마진 리포트</h2><p id="inputError" role="status" aria-live="polite" class="text-sm text-rose-400 mb-3"></p>
                     
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between items-center bg-gray-900/50 p-3 rounded-xl border border-gray-700/40">
@@ -199,7 +201,7 @@
 
                 <!-- 부가 지표 -->
                 <div class="text-xs text-gray-500 text-center bg-gray-900/40 p-3 rounded-xl border border-gray-800">
-                    💡 팁: 세무 유형별 부가세 및 종합소득세 추정액이 원가에 자동 가산되어 보수적이고 안전한 마진 산출이 가능합니다.
+                    계산 가정: VAT 차액 = 판매가 ÷ 11 − 매입원가 × 10% (0 미만은 0). 선택한 비율로 충당금을 계산하는 예시이며, 실제 부가세·소득세·법인세 신고액이나 적용 세율을 계산하지 않습니다. 수수료 기본값도 예시이므로 실제 계약 요율을 입력하세요.
                 </div>
             </div>
         </div>
@@ -263,7 +265,8 @@
                 if (!raw) return;
                 const data = JSON.parse(raw);
                 INPUT_IDS.forEach(id => {
-                    if (data[id] !== undefined && document.getElementById(id)) {
+                    if (data && typeof data === 'object' && !Array.isArray(data) &&
+                        typeof data[id] === 'string' && document.getElementById(id)) {
                         document.getElementById(id).value = data[id];
                     }
                 });
@@ -279,17 +282,51 @@
             calculate();
         }
 
-        function calculate() {
-            const costPrice = parseFloat(document.getElementById('costPrice').value) || 0;
-            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
-            const feeRate = (parseFloat(document.getElementById('customFee').value) || 0) / 100;
-            const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
-            const adFee = parseFloat(document.getElementById('adFee').value) || 0;
-            const fixedCost = parseFloat(document.getElementById('fixedCostPerUnit').value) || 0;
-            const monthlyVolume = parseInt(document.getElementById('monthlyVolume').value, 10) || 0;
-            const taxType = document.getElementById('taxType').value;
-            const targetMargin = parseFloat(document.getElementById('targetMarginRate').value) / 100;
+        function readNumber(id, max = 1e12, integer = false) {
+            const raw = document.getElementById(id).value.trim();
+            const value = Number(raw);
+            if (!raw || !Number.isFinite(value) || value < 0 || value > max || (integer && !Number.isInteger(value))) return null;
+            return value;
+        }
 
+        function solveRecommendedPrice(cost, logistics, feeRate, targetMargin, taxType) {
+            const fixed = cost + logistics;
+            const denominator = 1 - feeRate - targetMargin;
+            if (denominator <= 0) return null;
+            const coefficient = taxType === 'simple_retail' ? 0.015 : (taxType === 'general' ? 0.8 : 1.1) / 11;
+            const deduction = taxType === 'simple_retail' ? 0 : cost * 0.1 * (taxType === 'general' ? 0.8 : 1.1);
+            if (fixed === 0) return denominator >= coefficient ? 1 : null;
+            const untaxed = fixed / denominator;
+            let result = untaxed;
+            if (coefficient * untaxed > deduction) {
+                if (denominator <= coefficient) return null;
+                result = (fixed - deduction) / (denominator - coefficient);
+            }
+            if (!Number.isFinite(result) || result > 1e12) return null;
+            return Math.ceil(result);
+        }
+
+        function calculate() {
+            const costPrice = readNumber('costPrice');
+            const sellPrice = readNumber('sellPrice');
+            const customFee = readNumber('customFee', 100);
+            const shippingFee = readNumber('shippingFee');
+            const adFee = readNumber('adFee');
+            const fixedCost = readNumber('fixedCostPerUnit');
+            const monthlyVolume = readNumber('monthlyVolume', 1e9, true);
+            const taxType = document.getElementById('taxType').value;
+            const targetRate = readNumber('targetMarginRate', 100);
+            const valid = [costPrice, sellPrice, customFee, shippingFee, adFee, fixedCost, monthlyVolume, targetRate].every(v => v !== null)
+                && ['general', 'simple_retail', 'corporate'].includes(taxType);
+            document.getElementById('inputError').textContent = valid ? '' : '금액은 0~1조, 수수료는 0~100%, 수량은 0~10억의 정수로 입력하세요. 빈칸도 확인해 주세요.';
+            if (!valid) {
+                ['resNetProfit','resMarginRate','resPlatformFee','resTaxAmount','resTotalCost','resMonthlyTotalProfit','reversePriceResult'].forEach(id => document.getElementById(id).innerText = '—');
+                document.getElementById('comparisonTable').innerHTML = '';
+                if (marginChart) { marginChart.destroy(); marginChart = null; }
+                return false;
+            }
+            const feeRate = customFee / 100;
+            const targetMargin = targetRate / 100;
             document.getElementById('targetRateText').innerText = Math.round(targetMargin * 100) + '%';
             document.getElementById('volLabel').innerText = monthlyVolume.toLocaleString();
 
@@ -310,29 +347,16 @@
             document.getElementById('resTotalCost').innerText = Math.round(totalCost).toLocaleString() + '원';
             document.getElementById('resMonthlyTotalProfit').innerText = Math.round(monthlyTotalProfit).toLocaleString() + '원';
 
-            // 역산: 세금이 판매가에 의존하므로 몇 번 반복해 수렴
-            let recommendedPrice = 0;
-            const fixedPart = costPrice + shippingFee + adFee + fixedCost;
-            if (feeRate + targetMargin < 0.99) {
-                recommendedPrice = sellPrice > 0 ? sellPrice : (fixedPart / Math.max(0.01, 1 - feeRate - targetMargin));
-                for (let i = 0; i < 8; i++) {
-                    const taxAt = estimateTax(recommendedPrice, costPrice, taxType);
-                    const denom = 1 - feeRate - targetMargin;
-                    if (denom <= 0) {
-                        recommendedPrice = 0;
-                        break;
-                    }
-                    recommendedPrice = (fixedPart + taxAt) / denom;
-                }
-            }
+            const recommendedPrice = solveRecommendedPrice(costPrice, shippingFee + adFee + fixedCost, feeRate, targetMargin, taxType);
             document.getElementById('reversePriceResult').innerText =
-                recommendedPrice > 0
-                    ? Math.round(recommendedPrice).toLocaleString() + '원'
-                    : '설정 불가 (수수료+목표 과다)';
+                recommendedPrice !== null
+                    ? recommendedPrice.toLocaleString() + '원'
+                    : '설정 불가 (수수료·충당금·목표 또는 금액 한도 초과)';
 
             updateChart(costPrice, platformFee, shippingFee + adFee + fixedCost, estimatedTax, netProfit);
             updateComparisonTable(costPrice, shippingFee, adFee, fixedCost, taxType, sellPrice);
             saveInputs();
+            return true;
         }
 
         function updateChart(cost, fee, logistics, tax, profit) {
@@ -399,11 +423,12 @@
         };
 
         async function copyReport() {
+            if (!calculate()) return;
             const text = '[마진키트 엔터프라이즈 분석 리포트]\n' +
                          '- 판매가격: ' + document.getElementById('sellPrice').value + '원\n' +
                          '- 개당 순수익: ' + document.getElementById('resNetProfit').innerText + '\n' +
                          '- 실질 순마진율: ' + document.getElementById('resMarginRate').innerText + '\n' +
-                         '- 예상 월 순이익: ' + document.getElementById('resMonthlyTotalProfit').innerText;
+                         '- 예상 월 순이익: ' + document.getElementById('resMonthlyTotalProfit').innerText + '\n※ 충당금과 수수료는 입력 가정에 따른 추정값입니다.';
             try {
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     await navigator.clipboard.writeText(text);
@@ -412,7 +437,8 @@
                     ta.value = text;
                     document.body.appendChild(ta);
                     ta.select();
-                    document.execCommand('copy');
+                    const copied = document.execCommand('copy');
+                    if (!copied) { ta.remove(); throw new Error('Copy unavailable'); }
                     ta.remove();
                 }
                 alert('엔터프라이즈 리포트 요약이 복사되었습니다!');
@@ -422,6 +448,7 @@
         }
 
         function exportToExcel() {
+            if (!calculate()) return;
             if (typeof XLSX === 'undefined') {
                 alert('엑셀 라이브러리를 불러오지 못했습니다. 네트워크를 확인해 주세요.');
                 return;
@@ -431,7 +458,7 @@
                 ["매입원가", document.getElementById('costPrice').value + "원"],
                 ["판매가격", document.getElementById('sellPrice').value + "원"],
                 ["플랫폼 수수료", document.getElementById('resPlatformFee').innerText],
-                ["세금 충당금", document.getElementById('resTaxAmount').innerText],
+                ["세금 충당금 (가정에 따른 예시)", document.getElementById('resTaxAmount').innerText],
                 ["개당 순수익", document.getElementById('resNetProfit').innerText],
                 ["실질 순마진율", document.getElementById('resMarginRate').innerText],
                 ["예상 월 순이익", document.getElementById('resMonthlyTotalProfit').innerText]
@@ -495,7 +522,7 @@
   </section>
   <footer class="ov-foot">
     <span class="made">Made by ORVANTRO (오르반트로)</span>
-    <a href="http://orvantro.com/">공식 홈페이지로 돌아가기 →</a>
+    <a href="https://orvantro.com/">공식 홈페이지로 돌아가기 →</a>
   </footer>
 </div>
 
