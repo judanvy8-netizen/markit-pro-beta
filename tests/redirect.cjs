@@ -1,0 +1,5 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'index.html'),'utf8'),js=fs.readFileSync(path.join(root,'redirect.js'),'utf8');
+let next;const storage={getItem(){throw Error('must not access saved data')},setItem(){throw Error('must not modify saved data')},clear(){throw Error('must not clear saved data')}};
+const context={window:{location:{href:'https://example.invalid/?token=secret#private',replace(value){next=value}}},localStorage:storage,sessionStorage:storage};vm.runInNewContext(js,context);
+assert.equal(next,'https://judanvy8-netizen.github.io/marginkit-pro-beta/#simulator');assert.ok(html.includes('href="'+next+'"'));assert.ok(html.includes('orvantro@gmail.com'));assert.ok(!html.includes('judanvy8@gmail.com'));assert.ok(!/src="https:|on(?:click|load|error)=|unsafe-inline/.test(html));console.log('PASS fixed redirect, fragment route, no query leak, saved data preserved, fallback, contact, strict CSP');
